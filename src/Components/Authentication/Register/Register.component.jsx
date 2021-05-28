@@ -82,6 +82,7 @@ const Register = () => {
                 Register Now<br />
                 তোমার বন্ধুরা অপেক্ষা করছে !<br />
                 Don't miss your friends.
+                They are waiting...
 
 
             </Header>
