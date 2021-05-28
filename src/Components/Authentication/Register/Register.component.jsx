@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, Form, Segment, Header, Icon, Button, Message } from 'semantic-ui-react';
+import "./Register.component.css";
 
 
 const Register = () => {
@@ -74,9 +75,9 @@ const Register = () => {
     //     return errorState.map((error, index) => <p key={index}>{error.message}</p>)
     // }
 
-    return (<Grid verticalAlign='middle' textAlign='center'>
+    return (<Grid verticalAlign='middle' textAlign='center' >
 
-        <Grid.Column style={{ maxWidth: '400px' }}>
+        <Grid.Column style={{ maxWidth: '400px' }} className="form-style" >
             <Header icon as='h2'>
                 <Icon name="wechat" />
                 Register Now<br />
