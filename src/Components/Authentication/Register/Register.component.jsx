@@ -81,7 +81,7 @@ const Register = () => {
                 <Icon name="wechat" />
                 Register Now<br />
                 তোমার বন্ধুরা অপেক্ষা করছে !<br />
-                Don't miss your friends...
+                Don't miss your friends.
 
 
             </Header>
