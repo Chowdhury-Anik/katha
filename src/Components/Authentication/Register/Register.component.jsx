@@ -142,8 +142,8 @@ const Register = () => {
             <Header icon as='h2'>
                 <Icon name="wechat" />
                 Register Now<br />
-                তোমার বন্ধুরা অপেক্ষা করছে !<br />
-                Don't miss your friends.
+                নতুন নতুন বন্ধু বানাও  !<br />
+                Don't miss any friends.
 
 
             </Header>
