@@ -13,10 +13,11 @@ const Register = () => {
         email: '',
         password: '',
         confirmpassword: ''
-
-
     }
+
     let errors = [];
+
+    let userCollectionRef = firebase.database().ref('users');
 
     const [userState, setUserState] = useState(user);
     const [errorState, seterrorState] = useState(errors);
@@ -69,26 +70,66 @@ const Register = () => {
 
     const onSubmit = (event) => {
         seterrorState(() => []);
-
         setIsSuccess(false);
 
         if (checkForm()) {
+            setIsLoading(true);
             firebase.auth()
                 .createUserWithEmailAndPassword(userState.email, userState.password)
                 .then(createdUser => {
                     setIsLoading(false);
-                    console.log(createdUser);
+                    updateUserDetails(createdUser);
 
                 })
 
-                .catch(servererror => {
+                .catch(serverError => {
                     setIsLoading(false);
-                    seterrorState((error) => error.concat({ message: "This email is using by another user" }));
+                    seterrorState((error) => error.concat(serverError));
 
 
                 })
         }
 
+        const updateUserDetails = (createdUser) => {
+
+            if (createdUser) {
+                setIsLoading(true);
+                createdUser.user
+                    .updateProfile({
+                        displayName: userState.userName,
+                        photoURL: `http://gravatar.com/avatar/${createdUser.user.uid}?d=identicon`
+
+                    })
+                    .then(() => {
+                        setIsLoading(false);
+
+                        saveUserInDB(createdUser);
+                    })
+                    .catch((serverError) => {
+                        setIsLoading(false);
+
+                        seterrorState((error) => error.concat(serverError));
+
+                    })
+            }
+        }
+
+    }
+
+    const saveUserInDB = (createdUser) => {
+        setIsLoading(true);
+        userCollectionRef.child(createdUser.user.uid).set({
+            displayName: createdUser.user.displayName,
+            photoURL: createdUser.user.photoURL
+        })
+            .then(() => {
+                setIsLoading(false);
+                setIsSuccess(true);
+            })
+            .catch(serverError => {
+                setIsLoading(false);
+                seterrorState((error) => error.concat(serverError));
+            })
     }
 
     const errorMessage = () => {
@@ -152,7 +193,7 @@ const Register = () => {
 
 
                 </Segment>
-                <Button>Submit</Button>
+                <Button disabled={isLoading} loading={isLoading}>Submit</Button>
             </Form>
 
             {
