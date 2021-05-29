@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, Form, Segment, Header, Icon, Button, Message } from 'semantic-ui-react';
-import "./Register.component.css";
+import "./Register.css";
+import firebase from "../../../Server/Firebase";
+import { Link } from 'react-router-dom';
 
 
 const Register = () => {
@@ -14,9 +16,12 @@ const Register = () => {
 
 
     }
+    let errors = [];
 
     const [userState, setUserState] = useState(user);
-    // const [errorState, setErrorState] = useState(error);
+    const [errorState, seterrorState] = useState(errors);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
 
     const handleInput = (event) => {
@@ -32,11 +37,10 @@ const Register = () => {
 
     const checkForm = () => {
         if (isFormEmpty()) {
-            // setErrorState((error) => error.concat({ Message: "Please fill up all field" }));
+            seterrorState((error) => error.concat({ Message: "Please fill up all field" }));
             return false;
         }
-        else if (checkPassword) {
-            // setErrorState((error) => error.concat({ message: "Please fill with the correct password" }));
+        else if (!checkPassword()) {
             return false;
         }
 
@@ -46,15 +50,17 @@ const Register = () => {
     const isFormEmpty = () => {
         return !userState.userName.length ||
             !userState.password.length ||
-            !userState.confirmpassword ||
+            !userState.confirmpassword.length ||
             !userState.email.length;
     }
 
     const checkPassword = () => {
         if (userState.password.length < 8) {
+            seterrorState((error) => error.concat({ message: "Please fill with the correct password" }));
             return false;
         }
         else if (userState.password !== userState.confirmpassword) {
+            seterrorState((error) => error.concat({ message: "Please fill with the same password" }));
             return false;
         }
         return true;
@@ -62,18 +68,32 @@ const Register = () => {
     }
 
     const onSubmit = (event) => {
-        // setErrorState(() => []);
+        seterrorState(() => []);
+
+        setIsSuccess(false);
+
         if (checkForm()) {
+            firebase.auth()
+                .createUserWithEmailAndPassword(userState.email, userState.password)
+                .then(createdUser => {
+                    setIsLoading(false);
+                    console.log(createdUser);
 
-        } else {
+                })
 
+                .catch(servererror => {
+                    setIsLoading(false);
+                    seterrorState((error) => error.concat({ message: "This email is using by another user" }));
+
+
+                })
         }
 
     }
 
-    // const errorMessage = () => {
-    //     return errorState.map((error, index) => <p key={index}>{error.message}</p>)
-    // }
+    const errorMessage = () => {
+        return errorState.map((error, index) => <p key={index}>{error.message}</p>)
+    }
 
     return (<Grid verticalAlign='middle' textAlign='center' >
 
@@ -88,7 +108,7 @@ const Register = () => {
             </Header>
 
             <Form onSubmit={onSubmit}>
-                <segment stacked>
+                <Segment stacked>
                     <Form.Input
                         name='userName'
                         value={userState.userName}
@@ -100,7 +120,7 @@ const Register = () => {
 
                     />
                     <Form.Input
-                        name='mail'
+                        name='email'
                         value={userState.email}
                         icon='mail'
                         iconPosition='left'
@@ -131,17 +151,29 @@ const Register = () => {
                     />
 
 
-                </segment>
+                </Segment>
                 <Button>Submit</Button>
             </Form>
 
-            {/* {
+            {
                 errorState.length > 0 && <Message error>
-                    <h4>Errors:</h4>
+                    <h4>Errors</h4>
                     {errorMessage()}
 
                 </Message>
-            } */}
+            }
+            {isSuccess && <Message success>
+                <h3>Successfully Registered</h3>
+            </Message>
+            }
+            <Message>
+                Already an User? <Link to="/login" >Login </Link>
+            </Message>
+
+
+
+
+
         </Grid.Column>
 
     </Grid>)
