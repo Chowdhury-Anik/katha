@@ -1,8 +1,8 @@
 import { SET_USER } from "./actiontype";
-import { combineReducers } from "redux"
+import { combineReducers } from "redux";
 
 
-let defaultUser = {
+let defaultState = {
     currentUser: null
 }
 
@@ -15,4 +15,4 @@ const userReducer = (state = defaultState, action) => {
     return state;
 }
 
-export const combineReducers = ({ user: userReducer });
+export const comboReducers = combineReducers({ user: userReducer })

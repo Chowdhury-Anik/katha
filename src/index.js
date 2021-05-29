@@ -8,14 +8,15 @@ import Login from './Components/Authentication/Login/Login.component';
 import firebase from "./Server/Firebase";
 import 'semantic-ui-css/semantic.min.css';
 import { Provider, connect } from "react-redux";
-import { createStore } from "react-redux";
-import { combineReducers } from "./Store/reducer";
+import { createStore } from "redux";
+import { comboReducers } from './Store/reducer';
 import { setUser } from "./Store/actioncreator";
 
 
 
 
-const store = createStore((combineReducers) 
+
+const store = createStore(comboReducers)
 
 const Index = (props) => {
 
@@ -23,14 +24,14 @@ const Index = (props) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         props.setUser(user);
-        props.history.push('/')
+        props.history.push('/');
 
       } else {
         props.setUser(null);
-        props.history.push('/login')
+        props.history.push('/login');
       }
     })
-  }, []);
+  });
 
   console.log(props.currentUser);
 
