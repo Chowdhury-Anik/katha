@@ -1,0 +1,5 @@
+.sideBarStyle {
+    background: #131213 !important;
+    font-size: 1.2rem !important;
+    overflow-y: scroll;
+}
