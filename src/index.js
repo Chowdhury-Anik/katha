@@ -31,7 +31,7 @@ const Index = (props) => {
         props.history.push('/login');
       }
     })
-  });
+  }, []);
 
   console.log(props.currentUser);
 

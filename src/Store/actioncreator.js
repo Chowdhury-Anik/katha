@@ -1,4 +1,5 @@
-import { SET_USER } from "./actiontype";
+import { SET_USER, SET_CHANNEL, SET_FAVOURITECHANNEL, REMOVE_FAVOURITECHANNEL } from "./actiontype";
+
 
 export const setUser = (user) => {
     return {
@@ -6,7 +7,32 @@ export const setUser = (user) => {
         payload: {
             currentUser: user
         }
-
     }
-
 }
+
+export const setChannel = (channel) => {
+    return {
+        type: SET_CHANNEL,
+        payload: {
+            currentChannel: channel
+        }
+    }
+}
+
+// export const setfavouriteChannel = (channel) => {
+//     return {
+//         type: SET_FAVOURITECHANNEL,
+//         payload: {
+//             favouriteChannel: channel
+//         }
+//     }
+// }
+
+// export const removefavouriteChannel = (channel) => {
+//     return {
+//         type: REMOVE_FAVOURITECHANNEL,
+//         payload: {
+//             favouriteChannel: channel
+//         }
+//     }
+// }
